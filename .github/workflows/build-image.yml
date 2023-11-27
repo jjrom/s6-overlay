@@ -34,22 +34,9 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     
     - name: Build and Push Image
-      uses: docker/build-push-action@v3
-      with:
-        tags: ${{ env.NAME }}/${{ env.IMAGE }}:latest
-        platforms: linux/amd64,linux/arm64
-        file: ./Dockerfile
-        push: false
-   
-    - name: Unshallow repository
-      run: git fetch --prune --unshallow 2> /dev/null || true
-
-    - name: Tag master branch and push to repository
       if: ${{ startsWith(github.ref, 'refs/heads/master') }}
       run: |
-        
-        # Push image
-        docker push ${NAME}/${IMAGE}
+        docker buildx build --push --platform linux/amd64,linux/arm64 --tag ${NAME}/${IMAGE}:latest ./Dockerfile
     
     - name: Tag latest release and push to repository
       if: ${{ github.event_name == 'release' }}
