@@ -41,18 +41,18 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     
     - name: Release build
-        id: release_build
-        uses: docker/build-push-action@v4
-        with:
-          outputs: "type=registry,push=true"
-          provenance: false
-          platforms: linux/amd64,linux/arm64
-          build-args: |
-            Version=${{  env.TAG }}
-            GitCommit=${{ github.sha }}
-          tags: |
-            ${NAME}/${IMAGE}:${{ github.sha }}
-            ${NAME}/${IMAGE}:${{ env.TAG }}
-            ${NAME}/${IMAGE}:latest
+      id: release_build
+      uses: docker/build-push-action@v4
+      with:
+        outputs: "type=registry,push=true"
+        provenance: false
+        platforms: linux/amd64,linux/arm64
+        build-args: |
+          Version=${{  env.TAG }}
+          GitCommit=${{ github.sha }}
+        tags: |
+          ${NAME}/${IMAGE}:${{ github.sha }}
+          ${NAME}/${IMAGE}:${{ env.TAG }}
+          ${NAME}/${IMAGE}:latest
 
       
