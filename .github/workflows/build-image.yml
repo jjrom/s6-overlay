@@ -37,10 +37,10 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/heads/master') }}
       run: |
 
-        docker buildx build --push --platform linux/amd64 --tag ${NAME}/${IMAGE}:latest_amd64 --file ./Dockerfile.amd64 .
-        docker buildx build --push --platform linux/arm64 --tag ${NAME}/${IMAGE}:latest_arm64 --file ./Dockerfile.arm64 .
-        docker manifest create ${NAME}/${IMAGE}:latest ${NAME}/${IMAGE}:latest_arm64 ${NAME}/${IMAGE}:latest_amd64
-    
+        docker buildx build --push --platform linux/amd64 --tag ${NAME}/${IMAGE}:latest-amd64 --file ./Dockerfile.amd64 .
+        docker buildx build --push --platform linux/arm64 --tag ${NAME}/${IMAGE}:latest-arm64 --file ./Dockerfile.arm64 .
+        docker buildx imagetools create -t ${NAME}/${IMAGE}:latest ${NAME}/${IMAGE}:latest-amd64 ${NAME}/${IMAGE}:latest-arm64
+
     - name: Tag latest release and push to repository
       if: ${{ github.event_name == 'release' }}
       run: |
