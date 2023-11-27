@@ -34,7 +34,7 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     
     - name: Build and Push Image
-      if: ${{ startsWith(github.ref, 'refs/heads/master') }}
+      if: ${{ startsWith(github.ref, 'refs/heads/master') && github.event_name != 'release' }}
       run: |
 
         docker buildx build --push --platform linux/amd64 --tag ${NAME}/${IMAGE}:latest-amd64 --file ./Dockerfile.amd64 .
@@ -48,10 +48,8 @@ jobs:
         # Get latest release tag
         tag=$(git describe --tags --abbrev=0 | sed s/^v//)
         
-        # Tag image
-        docker tag ${NAME}/${IMAGE}:latest ${NAME}/${IMAGE}:${tag}
-
-        # Push release
-        docker push ${NAME}/${IMAGE}:${tag}
+        docker buildx build --push --platform linux/amd64 -t ${NAME}/${IMAGE}:latest-amd64 -t ${NAME}/${IMAGE}:${tag}-amd64 --file ./Dockerfile.amd64 .
+        docker buildx build --push --platform linux/arm64 -t ${NAME}/${IMAGE}:latest-arm64 -t ${NAME}/${IMAGE}:${tag}-arm64 --file ./Dockerfile.arm64 .
+        docker buildx imagetools create -t ${NAME}/${IMAGE}:latest -t ${NAME}/${IMAGE}:${tag} ${NAME}/${IMAGE}:latest-amd64 ${NAME}/${IMAGE}:latest-arm64
     
       
