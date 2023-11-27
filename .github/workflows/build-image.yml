@@ -36,7 +36,7 @@ jobs:
     - name: Build and Push Image
       if: ${{ startsWith(github.ref, 'refs/heads/master') }}
       run: |
-        docker buildx build --push --platform linux/amd64,linux/arm64 --tag ${NAME}/${IMAGE}:latest ./Dockerfile
+        docker buildx build --push --platform linux/amd64,linux/arm64 --tag ${NAME}/${IMAGE}:latest --file ./Dockerfile .
     
     - name: Tag latest release and push to repository
       if: ${{ github.event_name == 'release' }}
