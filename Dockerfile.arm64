@@ -1,4 +1,4 @@
-FROM ubuntu:mantic
+FROM ubuntu:noble
 LABEL maintainer="jerome.gasperi@gmail.com"
 
 # Add wait-for-it
