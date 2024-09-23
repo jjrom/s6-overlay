@@ -1,4 +1,4 @@
-FROM ubuntu:noble
+FROM ubuntu:noble-20240827.1
 LABEL maintainer="jerome.gasperi@gmail.com"
 
 # Add wait-for-it
