@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20240827.1
+FROM ubuntu:resolute-20261024.1
 LABEL maintainer="jerome.gasperi@gmail.com"
 
 # Add wait-for-it
@@ -10,8 +10,8 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/v3.1.6.2/s6-
 ADD https://github.com/just-containers/s6-overlay/releases/download/v3.1.6.2/s6-overlay-x86_64.tar.xz /tmp
 
 RUN apt-get update -y && \
-	apt-get install xz-utils -y && \
-	tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-	tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
-	rm -rf /tmp/*
+  apt-get install xz-utils -y && \
+  tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
+  tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
+  rm -rf /tmp/*
 ENTRYPOINT ["/init"]
